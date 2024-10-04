@@ -68,14 +68,14 @@ output and how lines are affected.
    used in grep.  In the same selection as above, replace all words that begin
 with 's' with the word 'sway'.
     ```
-    
+    grep -n '^s' words | sed 's/s/sway/g'
     ```
  * The `DEST` pattern can refer to the matching content from `SOURCE` using the
    character `&`. Introduce some redundancy into the word list and make your
 output duplicate the match after a space, for any line containing 'day', (e.g.,
 so "saturday" becomes "saturday day").
     ```
-    
+    grep -n 'day' words | sed 's/day/& &/g'
     ```
  * You can also define subexpressions in the matching part with escaped
    parentheses (`\(` and `\)`) and refer to those in the replacement part. `sed
