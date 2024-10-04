@@ -12,8 +12,14 @@ Let's revisit the dictionary file `/usr/share/dict/words` from last week's pipin
     ```
     grep -n -i '^R' words
     ```
-  * All words ending in j. _(The character `'$'` matches the end of the string in much the same way as `^` matches the start, but you may have to single-quote it to stop the shell from interpreting the dollar sign)_. 
+  * All words ending in j. _(The character `'$'` matches the end of the string in much the same way as `^` matches the start, but you may have to single-quote it to stop the shell from interpreting the dollar sign)_.
+    ```
+    grep -n 'J$' words
+    ```
   * The number of words containing the letter Q, ignoring case (e.g. capitalised or not).
+    ```
+    grep -n -i 'Q' words
+    ```
   * The first five words containing the letter sequence 'cl' _(remember, you can combine `grep` output with other tools using pipes)_.
   * All words containing the sequence "kp", but not "ckp". _(Hint: to specify that something _isn't_ a character, you may want to look at the documentation on 'bracket expressions'.)_
   * The last 15 words of exactly two letters. The expression `.` (period) matches a single character, but can you figure out how to specify that a string shouldn't have more characters? _(Hint: the characters you need are all mentioned above)_. 
