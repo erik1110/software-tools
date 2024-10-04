@@ -8,7 +8,10 @@ Let's revisit the dictionary file `/usr/share/dict/words` from last week's pipin
     ```
     grep -n 'Q' words
     ```
-  * All words starting with the letter R, in either upper or lower-case. _(The regular expression `X` would match an X anywhere in the word, but `^X` matches an X only at the start of the string)_. 
+  * All words starting with the letter R, in either upper or lower-case. _(The regular expression `X` would match an X anywhere in the word, but `^X` matches an X only at the start of the string)_.
+    ```
+    grep -n -i '^R' words
+    ```
   * All words ending in j. _(The character `'$'` matches the end of the string in much the same way as `^` matches the start, but you may have to single-quote it to stop the shell from interpreting the dollar sign)_. 
   * The number of words containing the letter Q, ignoring case (e.g. capitalised or not).
   * The first five words containing the letter sequence 'cl' _(remember, you can combine `grep` output with other tools using pipes)_.
