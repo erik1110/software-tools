@@ -35,12 +35,12 @@ Let's revisit the dictionary file `/usr/share/dict/words` from last week's pipin
     ```
   * All three-letter words with no vowels (aeiou). _(Hint: this is in part a job for bracket expressions again.)_
     ```
-    
+    grep '^[a-zA-Z^aeiouAEIOU]\{3\}$' words
     ```
   * All words of exactly 7 letters, where the third one is an e and the word
     ends "-ded". _(This kind of search is really useful for crosswords)._
     ```
-    
+    grep '^[a-zA-Z]\{2\}[e][d][e][d]$' words
     ```
   * Find all words that start with a P (whether capitalised or not), and contain
     at least four instances of the letter a. Putting a `*` after something in a
@@ -48,7 +48,7 @@ regular expression searches for _any number of repetitions of this, including 0_
 so for example `'a*'` would find words with any number of the letter a,
 including 0 (which is not what you want here).
     ```
-    
+    grep -n '^[Pp]\(.*a.*\)\{4,\}' words
     ```
 
 ## Sediting exercises
