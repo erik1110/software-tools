@@ -62,7 +62,7 @@ substrings matching the source regular expression into the destination one.
    a `sed 's/SOURCE/DEST/'` command to change 'day' into 'week'. Look at the
 output and how lines are affected.
     ```
-    
+    grep -n 'ay$' words | sed 's/day/week/g'
     ```
  * The `SOURCE` part of the command works very similarly to the patterns you
    used in grep.  In the same selection as above, replace all words that begin
