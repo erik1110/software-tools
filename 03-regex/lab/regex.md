@@ -5,6 +5,9 @@
 Let's revisit the dictionary file `/usr/share/dict/words` from last week's piping exercises. `grep [-iv] EXPRESSION` reads standard input and prints only lines that match the regular expression to standard output. With `-i` it is case-insensitive, and with `-v` it only prints lines that do _not_ match the expression. Given this information, can you find the following?
   
   * All words containing the letter Q, capitalised. _(A regular expression containing a string of one or more letters matches all strings that contain the expression as a substring.)_
+    ```
+    grep -n 'Q' words
+    ```
   * All words starting with the letter R, in either upper or lower-case. _(The regular expression `X` would match an X anywhere in the word, but `^X` matches an X only at the start of the string)_. 
   * All words ending in j. _(The character `'$'` matches the end of the string in much the same way as `^` matches the start, but you may have to single-quote it to stop the shell from interpreting the dollar sign)_. 
   * The number of words containing the letter Q, ignoring case (e.g. capitalised or not).
