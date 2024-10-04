@@ -26,11 +26,12 @@ Let's revisit the dictionary file `/usr/share/dict/words` from last week's pipin
     ```
   * All words containing the sequence "kp", but not "ckp". _(Hint: to specify that something _isn't_ a character, you may want to look at the documentation on 'bracket expressions'.)_
     ```
-    
+    grep '[^c]kp' words
     ```
   * The last 15 words of exactly two letters. The expression `.` (period) matches a single character, but can you figure out how to specify that a string shouldn't have more characters? _(Hint: the characters you need are all mentioned above)_.
     ```
-    
+    grep '^.\{2\}$' words | tail -n 15
+    grep '^..$' words | tail -n 15
     ```
   * All three-letter words with no vowels (aeiou). _(Hint: this is in part a job for bracket expressions again.)_
     ```
