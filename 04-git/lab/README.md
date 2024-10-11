@@ -461,6 +461,11 @@ Task 2
 Restore the commit! What commands do you know to compare the
 `diff`-erences between two commits? Could you make a patch to restore
 the commit? Do you know what the `cherry-pick` command does?
+```
+git diff HEAD [commit id]
+or
+git show [commit id]
+```
 
 Task 3  
 Let's pretend you can't remember anything about the commit message. From
