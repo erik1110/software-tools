@@ -6,5 +6,6 @@ int main() {
     puts("Hi2");
     puts("Hi3");
     puts("treasure");
+    puts("Hi4");
     return 0;
 }
