@@ -8,5 +8,6 @@ int main() {
     puts("treasure");
     puts("Hi4");
     puts("Hi5");
+    puts("Hi6");
     return 0;
 }
