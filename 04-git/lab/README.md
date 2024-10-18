@@ -454,7 +454,7 @@ Find the commit id of the vanished commit. Hope you made the commit
 message memorable! Use `git reflog` to see a log of past actions. Do you
 know a shell command that you could use to search it?
 ```
-git reflog | grep "tresure"
+git reflog | grep "treasure"
 ```
 
 Task 2  
