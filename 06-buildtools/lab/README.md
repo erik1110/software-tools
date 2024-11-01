@@ -277,7 +277,9 @@ sudo apt install openjdk-17-jdk maven
 java -version
 mvn -version
 ls /usr/lib/jvm/
+echo $JAVA_HOME
 
+sudo update-alternatives --config javac
 ```
 
 
