@@ -270,6 +270,17 @@ can help manage alternative development environments for you.  Read
 the manual page!
 |||
 
+### My solution
+```
+sudo apt update
+sudo apt install openjdk-17-jdk maven
+java -version
+mvn -version
+ls /usr/lib/jvm/
+
+```
+
+
 ## Installing on your own machine
 
 Use whatever package manager your OS comes with.  If you can't and
