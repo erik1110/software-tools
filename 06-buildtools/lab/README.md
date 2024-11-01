@@ -122,7 +122,15 @@ sudo apt install apt-file
 sudo apt-file update
 sudo apt-file search pip
 sudo apt install python3-pip
+sudo apt install python3-mistletoe
+```
 
+```
+import mistletoe
+
+with open('hello.md', 'r') as file:
+    html_output = mistletoe.markdown(file)
+    print(html_output)
 
 ```
 
