@@ -287,6 +287,11 @@ vi ~/.bashrc
 source ~/.bashrc
 ```
 
+```sh
+export JAVA_HOME='/usr/lib/jvm/java-17-openjdk'
+export PATH="${PATH}:${JAVA_HOME}/bin"
+```
+
 ## Installing on your own machine
 
 Use whatever package manager your OS comes with.  If you can't and
