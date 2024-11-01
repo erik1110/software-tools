@@ -282,6 +282,10 @@ echo $JAVA_HOME
 sudo update-alternatives --config javac
 ```
 
+```
+vi ~/.bashrc
+source ~/.bashrc
+```
 
 ## Installing on your own machine
 
