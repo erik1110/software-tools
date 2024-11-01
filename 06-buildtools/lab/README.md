@@ -401,6 +401,12 @@ The one thing you should add here is the `exec-maven-plugin` as follows, so that
 
 The important line is the `mainClass` which you set to the full name (with path components) of your class with the `main()` function.
 
+### My solution
+```
+mvn clean package
+mvn exec:java
+```
+
 ## Compile, run and develop
 
 `mvn compile` compiles the project. The very first time you do this, it will download a lot of plugins, after that it will be pretty fast. Like `make`, it only compiles files that have changed since the last run, but if this ever gets out of sync (for example because you cancelled a compile halfway through) then `mvn clean` will remove all compiled files so the next compile will rebuild everything.
