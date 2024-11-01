@@ -117,6 +117,15 @@ This should print the markdown rendered to HTML, e.g.
 
     <h1>Markdown Example</h1>\n<p>Markdown is a <em>markup</em> language.</p>
 
+```
+sudo apt install apt-file
+sudo apt-file update
+sudo apt-file search pip
+sudo apt install python3-pip
+
+
+```
+
 
 ## Python versioning hell
 Python version 3 came out in 2008 and has some syntax changes compared
