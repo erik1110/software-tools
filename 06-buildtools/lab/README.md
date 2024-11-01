@@ -243,6 +243,14 @@ A Java Development Kit (JDK) contains the `javac` and `jar` tools as well as a J
 
 You can do this exercise either in your VM, or on your own machine where you have probably already installed Java for the OOP/Algorithms unit, and you can use your favourite editor. The exercises should work exactly the same way in both cases, there is nothing POSIX-specific here.
 
+### My solution
+```
+sudo apt install default-jdk
+sudo apt install maven
+mvn -version
+```
+
+
 ## Installing on Debian
 
 On Debian, install the `openjdk-17-jdk` and `maven` packages. This
