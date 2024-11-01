@@ -117,6 +117,7 @@ This should print the markdown rendered to HTML, e.g.
 
     <h1>Markdown Example</h1>\n<p>Markdown is a <em>markup</em> language.</p>
 
+### My Soultion
 ```
 sudo apt install apt-file
 sudo apt-file update
@@ -198,6 +199,12 @@ deviation 10:
 This should print an array of five values that are not too far off 200
 (to be precise, with about 95% confidence they will be between 180 and
 220 - more on this in Maths B later on).
+
+### My Soultion
+```
+apt search scipy
+sudo apt install python3-scipy
+```
 
 ## Avoiding sudo
 
