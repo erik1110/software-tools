@@ -488,6 +488,35 @@ Compile and run this, and you should see:
       - Git
       - Maven
 
+### My solution
+- Step 1: Move the Dependency to the Correct Section
+
+You should move the Thymeleaf dependency outside of the <dependencyManagement> section and place it directly inside the <dependencies> section of your pom.xml. Here's how you should update your pom.xml:
+```
+<dependencies>
+    <!-- Thymeleaf dependency -->
+    <dependency>
+        <groupId>org.thymeleaf</groupId>
+        <artifactId>thymeleaf</artifactId>
+        <version>3.1.15</version>
+    </dependency>
+    
+    <!-- Other dependencies can go here -->
+</dependencies>
+```
+
+- Step 2: Clean and Rebuild the Project
+```
+mvn clean
+mvn install
+mvn compile
+# Verify Thymeleaf Classes Are Available
+mvn dependency:tree
+# Try Running the Application Again
+mvn exec:java
+```
+
+
 Let's look at how the code works.
 
   1. A template resolver is a class that finds a template when you give it a name (here: "unit"). In this case we use a resolver that loads off the classpath, so we just have to put the template files somewhere under `src/main/resources`; we tell it that we want the template files treated as text (e.g. not HTML), and that the template files are in a subfolder called `templates`.
