@@ -68,11 +68,36 @@ SELECT name FROM PARTY ORDER BY name;
 
 5. List the name, party and number of votes obtained for the winner only in the Knowle ward.
 
+```
+  SELECT c.name AS candidate_name, p.name AS party_name, c.votes
+  FROM Candidate c
+  LEFT JOIN party p ON c.party = p.id
+  INNER JOIN ward w ON w.id = c.ward
+  WHERE w.name = 'Knowle'
+  ORDER BY c.votes DESC
+  LIMIT 1;
+```
+
 ## Census
 
 1. The university of Bristol is situated in the Cabot ward (ward names are not always distinct, but this one is). Find the names and codes of the CLU, region and country containing the Cabot ward (CLU = county level unit = "row in County table").
 
+```
+  SELECT c.code, c.name, r.name, c_try.name
+  FROM Ward w
+  INNER JOIN County c ON c.code = w.parent
+  INNER JOIN Region r ON r.code = c.parent
+  INNER JOIN Country c_try ON c_try.code = c.country
+  WHERE w.name='Cabot';
+```
+code|name|name|name
+E06000023|Bristol, City of|South West|England
+
 2. Find the number of women managers in the Cabot ward. 
+
+```
+
+```
 
 3. For the Stoke Bishop ward, list the 9 occupation class names and the number of men in each occupation. Your table should have two columns called name and number. 
 
