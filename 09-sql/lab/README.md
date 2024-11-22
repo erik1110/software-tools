@@ -10,6 +10,19 @@ indices, instead try and join with other tables and use names.
 You can load each database directly in SQLite (`sqlite3 Elections.db`
 or `sqlite3 Census.db`) or use the `ATTACH DATABASE` command to load them all at runtime.
 
+```
+sqlite3 Elections.db
+ATTACH DATABASE 'Census.db' AS census;
+```
+check table
+```
+.tables
+```
+
+```
+.header on
+```
+
 ## Elections database
 ![Elections entity relationship diagram](./elections.png)
 
@@ -21,10 +34,26 @@ or `sqlite3 Census.db`) or use the `ATTACH DATABASE` command to load them all at
 
 
 1. List the names of all parties that stood in the election, ordered alphabetically by name.
+```
+SELECT name FROM PARTY ORDER BY name;
+```
 
 2. List the names of all parties that stood in the Bedminster ward.
+```
+ SELECT p.name AS party_name
+ FROM Candidate c
+ INNER JOIN ward w ON c.ward = w.id
+ INNER JOIN party p ON c.party = p.id
+ WHERE w.name = 'Bedminster';
+```
 
 3. How many votes did Labour get in the Stockwood ward?
+```
+ SELECT sum(votes) FROM Candidate c 
+ INNER JOIN ward w ON c.ward = w.id
+ INNER JOIN party p ON c.party = p.id
+ WHERE p.name='Labour' and w.name='Stockwood'
+```
 
 4. List the names, parties and number of votes obtained for all candidates in the Southville ward. Order the candidates by number of votes obtained descending (winner comes first).
 
