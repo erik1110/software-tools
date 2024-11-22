@@ -56,6 +56,15 @@ SELECT name FROM PARTY ORDER BY name;
 ```
 
 4. List the names, parties and number of votes obtained for all candidates in the Southville ward. Order the candidates by number of votes obtained descending (winner comes first).
+```
+ SELECT c.name as candidate_name, p.name as party_name, c.votes
+ FROM Candidate c
+ LEFT OUTER JOIN party p ON c.party = p.id
+ INNER JOIN ward w ON w.id = c.ward
+ WHERE w.name = 'Southville'
+ ORDER BY c.votes DESC;
+```
+
 
 5. List the name, party and number of votes obtained for the winner only in the Knowle ward.
 
