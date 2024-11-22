@@ -85,9 +85,9 @@ SELECT name FROM PARTY ORDER BY name;
 ```
   SELECT c.code, c.name, r.name, c_try.name
   FROM Ward w
-  INNER JOIN County c ON c.code = w.parent
-  INNER JOIN Region r ON r.code = c.parent
-  INNER JOIN Country c_try ON c_try.code = c.country
+  LEFT OUTER JOIN County c ON c.code = w.parent
+  LEFT OUTER JOIN Region r ON r.code = c.parent
+  LEFT OUTER JOIN Country c_try ON c_try.code = c.country
   WHERE w.name='Cabot';
 ```
 ```
@@ -98,11 +98,42 @@ E06000023|Bristol, City of|South West|England
 2. Find the number of women managers in the Cabot ward. 
 
 ```
+  SELECT count(s.gender)
+  FROM Statistic s
+  LEFT OUTER JOIN Occupation o ON s.occId = o.id
+  LEFT OUTER JOIN Ward w ON w.code = s.wardId
+  WHERE o.name LIKE '%Manager%' and s.gender = 0;
+  
+```
 
-
+```
+count(s.gender)
+8570
 ```
 
 3. For the Stoke Bishop ward, list the 9 occupation class names and the number of men in each occupation. Your table should have two columns called name and number. 
+
+```
+  SELECT o.name, s.data
+  FROM Statistic s
+  LEFT JOIN Ward w ON w.code = s.wardId
+  LEFT JOIN Occupation o ON s.occId = o.id
+  WHERE s.gender = 1 and w.name = 'Stoke Bishop'
+  GROUP BY o.id;
+```
+
+```
+name|data
+Managers, directors and senior officials|219
+Professional occupations|641
+Associate professional and technical occupations|235
+Administrative and secretarial occupations|273
+Skilled trades occupations|27
+Caring, leisure and other service occupations|145
+Sales and customer service occupations|97
+Process, plant and machine operatives|5
+Elementary occupations|103
+```
 
 ## Harder Questions
 ### Elections
