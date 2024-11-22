@@ -90,12 +90,15 @@ SELECT name FROM PARTY ORDER BY name;
   INNER JOIN Country c_try ON c_try.code = c.country
   WHERE w.name='Cabot';
 ```
+```
 code|name|name|name
 E06000023|Bristol, City of|South West|England
+```
 
 2. Find the number of women managers in the Cabot ward. 
 
 ```
+
 
 ```
 
