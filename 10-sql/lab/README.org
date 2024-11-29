@@ -138,3 +138,88 @@ The /read down, write up/ access control model is used to protect access to data
 This one is a bit more surprising but is used when you want to protect the integrity of data.
 - You can write to a file if you have a strictly higher clearance than the file.  The idea is that you should be able to send orders to people with less clearance than you.
 - You can read a file only with more clearance than you have. The idea is that you shouldn't be influenced by ideas from outside sources. 
+
+
+#+BEGIN_SRC 
+% Files
+file(file1).
+file(file2).
+file(file3).
+
+% Principals (users)
+principal(user1).
+principal(user2).
+principal(user3).
+
+% Access control
+canRead(user1, file1).
+canRead(user2, file2).
+
+% Ownership
+owner(file1, user1).
+owner(file2, user2).
+owner(file3, user1).
+
+% Delegated control
+saysCanRead(user1, user2, file1).
+delegatesTo(user1, user2).
+
+% Roles
+holds(user1, auditor).
+holds(user2, auditor).
+
+% A principal can read a file if they are the owner of the file
+canRead(P, F) :- owner(F, P).
+
+% A principal can read a file if othersCanRead(F) is true (for unclassified files)
+othersCanRead(F) :- unclassified(F).  % Define 'othersCanRead' as being unclassified
+
+% A principal can read a file if they are granted access by the owner
+canRead(P, F) :- saysCanRead(O, P, F), owner(F, O).
+
+% If a principal has been delegated control over the file, they can delegate access as well
+saysCanRead(P1, P2, F) :- owner(F, P1), delegatesTo(P1, P2).
+
+% A principal can read a file if they hold a role and the role allows it
+canRead(P, F) :- holds(P, R), roleCanRead(R, F).
+
+% Define roles and what they can read
+roleCanRead(auditor, file1).
+roleCanRead(auditor, file2).
+
+% Files have a security level
+unclassified(file1).
+secret(file2).
+topsecret(file3).
+
+% Principals have clearance levels
+clearance(user1, secret).
+clearance(user2, topsecret).
+clearance(user3, unclassified).
+
+% Security levels hierarchy: unclassified < secret < topsecret
+% You can read a file if you have the same or higher clearance than the file
+canRead(P, F) :- clearance(P, S), clearanceLevel(S, F).
+
+% You can write to a file if you have the same or lower clearance than the file
+canWrite(P, F) :- clearance(P, S), clearanceLevelWrite(S, F).
+
+% Define the clearance hierarchy
+clearanceLevel(secret, file2).
+clearanceLevel(topsecret, file3).
+
+clearanceLevelWrite(secret, file1).
+clearanceLevelWrite(topsecret, file2).
+
+% Read down: You can read a file if you have the same or higher clearance than the file
+canRead(P, F) :- clearance(P, S), clearanceLevel(S, F).
+
+% Write up: You can write to a file if you have the same or lower clearance than the file
+canWrite(P, F) :- clearance(P, S), clearanceLevelWrite(S, F).
+
+% Write down: You can write to a file if you have strictly higher clearance than the file
+canWrite(P, F) :- clearance(P, S), clearanceLevelWriteHigher(S, F).
+
+% Read up: You can read a file only if you have higher clearance than the file
+canRead(P, F) :- clearance(P, S), clearanceLevelReadHigher(S, F).
+#+END_SRC
