@@ -57,7 +57,7 @@ child(X,Y) :- parent(Y,X).
 grandparent(X,Z) :- parent(X,Y), parent(Y,Z).
 
 sibling(X, Y) :- parent(P, X), parent(P, Y), X != Y.
-cousin(X, Y) :- grandparent(P, X), grandparent(P, Y).
+cousin(X, Y) :- grandparent(P, X), grandparent(P, Y), not sibling(X,Y).
 #+END_SRC
 
 [[https://en.wikipedia.org/wiki/The_Addams_Family][The Addams Family]] tree (or a cut down version of it) is shown above.  Your task is to encode the family tree in Datalog.  To do this you'll need to describe the relationships in Horn clauses.
