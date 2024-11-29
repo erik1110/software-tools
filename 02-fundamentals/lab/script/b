@@ -1,0 +1,97 @@
+#!/bin/sh
+
+# Function to show the usage of the script
+show_usage() {
+    echo "Usage:"
+    echo "./b compile NAME     - Compile the C source file NAME.c"
+    echo "./b run NAME          - Run the compiled program NAME"
+    echo "./b build NAME        - Compile and then run the program NAME"
+    echo "./b                   - Show this usage message"
+    exit 1
+}
+
+# Check for an empty argument or unrecognized command
+if [ $# -eq 0 ]; then
+    show_usage
+fi
+
+# Extract the command and the filename argument
+COMMAND=$1
+FILENAME=$2
+
+# Helper function to check if the file exists
+check_file_exists() {
+    if [ ! -f "$1" ]; then
+        echo "Error: $1 does not exist."
+        exit 1
+    fi
+}
+
+# Compile command
+if [ "$COMMAND" = "compile" ]; then
+    if [ -z "$FILENAME" ]; then
+        echo "Error: Missing filename for compile."
+        exit 1
+    fi
+
+    # Add ".c" extension if necessary
+    if echo "$FILENAME" | grep -q '\.c$'; then
+        SOURCE_FILE=$FILENAME
+    else
+        SOURCE_FILE="$FILENAME.c"
+    fi
+
+    check_file_exists "$SOURCE_FILE"
+    
+    OUTPUT_FILE=$(basename "$FILENAME" .c)
+    
+    gcc -Wall -std=c11 -g "$SOURCE_FILE" -o "$OUTPUT_FILE"
+    if [ $? -ne 0 ]; then
+        echo "Compilation failed."
+        exit 1
+    fi
+    echo "Compiled $SOURCE_FILE successfully."
+
+# Run command
+elif [ "$COMMAND" = "run" ]; then
+    if [ -z "$FILENAME" ]; then
+        echo "Error: Missing filename for run."
+        exit 1
+    fi
+
+    # Add ".c" extension if necessary
+    if echo "$FILENAME" | grep -q '\.c$'; then
+        EXECUTABLE=$(basename "$FILENAME" .c)
+    else
+        EXECUTABLE="$FILENAME"
+    fi
+
+    check_file_exists "$EXECUTABLE"
+    
+    ./"$EXECUTABLE"
+    if [ $? -ne 0 ]; then
+        echo "Error: Failed to run $EXECUTABLE."
+        exit 1
+    fi
+
+# Build command
+elif [ "$COMMAND" = "build" ]; then
+    if [ -z "$FILENAME" ]; then
+        echo "Error: Missing filename for build."
+        exit 1
+    fi
+
+    # Compile the program first
+    ./b compile "$FILENAME"
+    if [ $? -ne 0 ]; then
+        echo "Error: Compilation failed, skipping run."
+        exit 1
+    fi
+
+    # Run the program if compilation was successful
+    ./b run "$FILENAME"
+
+# Unrecognized command
+else
+    show_usage
+fi
