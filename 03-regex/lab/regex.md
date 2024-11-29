@@ -73,7 +73,7 @@ output and how lines are affected.
    used in grep.  In the same selection as above, replace all words that begin
 with 's' with the word 'sway'.
     ```
-    grep -n '^s' words | sed 's/s/sway/g'
+    grep -n '^s' words | sed 's/s/sway/'
     ```
  * The `DEST` pattern can refer to the matching content from `SOURCE` using the
    character `&`. Introduce some redundancy into the word list and make your
