@@ -180,3 +180,25 @@ This will show you all the differences that `diff` has detected. By running the 
    cat difflog
    ```
 
+  ```
+  3c3
+  < -rw-r--r-- 1 vagrant vagrant     385 Sep 27 18:24 difflog
+  ---
+  > -rw-r--r-- 1 vagrant vagrant       0 Nov 29  2024 difflog
+  6c6
+  < -rw-r--r-- 1 vagrant vagrant       0 Nov 29  2024 tmp
+  ---
+  > -rw-r--r-- 1 vagrant vagrant     452 Nov 29 19:43 tmp
+  1c1
+  < total 2884
+  ---
+  > total 2888
+  3c3
+  < -rw-r--r-- 1 vagrant vagrant     385 Sep 27 18:24 difflog
+  ---
+  > -rw-r--r-- 1 vagrant vagrant     248 Nov 29 19:48 difflog
+  6c6
+  < -rw-r--r-- 1 vagrant vagrant       0 Nov 29  2024 tmp
+  ---
+  > -rw-r--r-- 1 vagrant vagrant     452 Nov 29 19:43 tmp
+  ```
