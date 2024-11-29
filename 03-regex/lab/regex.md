@@ -50,6 +50,7 @@ Let's revisit the dictionary file `/usr/share/dict/words` from last week's pipin
 regular expression searches for _any number of repetitions of this, including 0_
 so for example `'a*'` would find words with any number of the letter a,
 including 0 (which is not what you want here).
+    .*: Matches zero or more characters (any character, except for a newline).
     ```
     grep -n '^[Pp]\(.*a.*\)\{4,\}' words
     ```
