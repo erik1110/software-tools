@@ -243,5 +243,3 @@ An example that matches this but fails the simpler schema:
 - BFPO 1234 (British Forces Post Office format)
 
 This regex covers many special cases beyond the basic two-letter, one-number format, including overseas territories, special administrative regions, and military postal codes.
-
-Would you like me to elaborate on any of these explanations or provide more detailed examples?
