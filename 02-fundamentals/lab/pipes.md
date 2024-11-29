@@ -30,12 +30,30 @@ terminal. You can either start each command with `cat /usr/share/dict/words |
 ...` or do it without cat by providing the words file as an argument to the
 first command in your pipeline.
 
-  * The first word in the file. 
-  * The last word in the file. 
+  * The first word in the file.
+    ```
+    head -n 1 words
+    ```
+  * The last word in the file.
+    ```
+    tail -n 1 word
+    ```
   * The number of words in the words file - there is one word per line.
-  * The 6171st word in the file. 
+    ```
+    wc -l words
+    ```
+  * The 6171st word in the file.
+    ```
+    sed -n '6171p' words
+    ```
   * The first five words that are among the last 100 words on the list.
-  * The last ten words in the file, sorted in reverse order. 
+    ```
+    tail -n 100 words | head -n 5
+    ```
+  * The last ten words in the file, sorted in reverse order.
+    ```
+    tail -n 10 words | sort -r
+    ```
   
 ## Redirection
 
