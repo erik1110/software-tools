@@ -81,3 +81,102 @@ new output to `difflog`.  Inspect the resulting file and see what it tells you
 about the changes.
 
 
+Let's break down the steps and tasks involved in this exercise:
+
+### Step 1: Redirect `ls -l` output to a file called `tmp`
+
+1. **Navigate to the directory** that contains files and is writable by your current user. For example, you might use your `/shared` directory or the home directory of your `vagrant` user.
+
+   ```bash
+   cd /path/to/your/directory
+   ```
+
+2. **Use `ls -l` to list the directory contents** and redirect the output to a file called `tmp`:
+
+   ```bash
+   ls -l > tmp
+   ```
+
+   This command takes the detailed directory listing and stores it in the `tmp` file instead of displaying it on the terminal.
+
+3. **Inspect the contents of `tmp`** to compare it with the output of `ls -l`:
+
+   ```bash
+   cat tmp
+   ```
+
+   You should see the same detailed directory listing as you would from `ls -l`. However, there may be small differences due to things like timestamps or file permissions.
+
+### Step 2: Use `diff` to compare the current `ls -l` output with `tmp`
+
+Now, you want to compare the contents of `tmp` with the current output of `ls -l`. We can use the `diff` command for this comparison.
+
+1. **Run the `diff` command** to compare `tmp` with the current output of `ls -l`:
+
+   ```bash
+   diff tmp <(ls -l)
+   ```
+
+   Here's how this works:
+   - `tmp` is the first file to compare.
+   - `<(ls -l)` is process substitution. It runs `ls -l` and provides the output as a temporary file-like stream that `diff` can read, without needing to redirect it to a file.
+
+   The `diff` command will show the differences between the content of `tmp` (the directory listing you saved earlier) and the current output of `ls -l`.
+
+### Step 3: Redirect the `diff` output to `difflog`
+
+To capture the output of `diff` into a file called `difflog`, we can redirect it as follows:
+
+1. **Redirect `diff` output to `difflog`**:
+
+   ```bash
+   diff tmp <(ls -l) > difflog
+   ```
+
+   This saves the differences between `tmp` and the current `ls -l` output in the `difflog` file.
+
+2. **Append new `diff` output to `difflog`** (in case you want to run the `diff` again later):
+
+   ```bash
+   diff tmp <(ls -l) >> difflog
+   ```
+
+   The `>>` operator appends the new differences to the `difflog` file, instead of overwriting it.
+
+### Step 4: Inspect the `difflog` file
+
+Finally, you can inspect the `difflog` file to see what the differences tell you about changes in the directory listing. For example:
+
+```bash
+cat difflog
+```
+
+This will show you all the differences that `diff` has detected. By running the same `diff` command multiple times (e.g., after making changes to the directory), you can track how the contents of the directory have changed.
+
+### Summary of Commands:
+
+1. Redirect `ls -l` output to `tmp`:
+   ```bash
+   ls -l > tmp
+   ```
+
+2. Compare `tmp` with the current `ls -l` output using `diff`:
+   ```bash
+   diff tmp <(ls -l)
+   ```
+
+3. Redirect the `diff` output to `difflog`:
+   ```bash
+   diff tmp <(ls -l) > difflog
+   ```
+
+4. Append new `diff` output to `difflog`:
+   ```bash
+   diff tmp <(ls -l) >> difflog
+   ```
+
+5. Inspect the contents of `difflog`:
+   ```bash
+   cat difflog
+   ```
+
