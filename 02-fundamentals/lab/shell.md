@@ -47,6 +47,16 @@ Argument #0: [./arguments]
 Argument #1: [*] 
 ```
 
+Summary of Behavior in Bash
+Without quotes (e.g., ./arguments *):
+
+Bash expands * to match all files in the directory.
+If the directory is empty, * is passed as a literal string.
+With quotes or escape (e.g., '*', "*", \*):
+
+Bash passes * as a literal string without attempting to expand it.
+This behavior ensures you have multiple ways to control how * is interpreted.
+
 ## Files with spaces in their names
 
 The command `touch FILENAME` creates a file. Create a file with a space in its name by typing `touch "silly named file"`. What would happen if you left the quotes off (you can try it, then do `ls`)?
