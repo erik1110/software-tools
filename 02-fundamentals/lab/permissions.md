@@ -41,6 +41,192 @@ _This is another reminder that if you want to store private files on a lab machi
 
 _Altenatively you could remove permissions from everyone else on your home directory there, but this prevents you from being able to share files in specific folders that you do want to share with other students._
 
+
+### 1. **Setting up file permissions on the home directory for `brian`**:
+
+As user `brian`, follow these steps:
+
+1. **Set full permissions for yourself** (`rwx`):
+
+```bash
+chmod 700 ~
+```
+
+This gives you (as `brian`) full read, write, and execute (`rwx`) permissions for your home directory, but prevents anyone else from doing anything.
+
+2. **Allow members of the `users` group to list files and change into the home directory, but not add/remove files**:
+   First, change the group of your home directory to `users`:
+
+```bash
+sudo chgrp -R users ~
+```
+
+Now, modify the permissions so members of the `users` group can read and execute (list and enter the directory) but cannot modify the files:
+
+```bash
+chmod 750 ~
+```
+
+This grants:
+- `brian` (owner) full permissions (`rwx`).
+- Members of the `users` group read and execute permissions (`r-x`), which allows them to list the directory and enter it.
+- Others have no access to the directory (`---`).
+
+3. **Prevent others from accessing your home directory**:
+   By setting the permission as `750`, others (non-group members) will not be able to access your home directory.
+
+### 2. **Create the `readme.txt` file**:
+
+Now, as `brian`, create the `readme.txt` file in your home directory:
+
+```bash
+nano ~/readme.txt
+```
+
+Add some content to this file (e.g., "This is Brian's readme.") and save it. 
+
+### 3. **Testing the permissions as different users**:
+
+Now, you need to test the permissions as different users.
+
+- **Log in as `nigel`** using `su` and check the permissions:
+
+```bash
+su nigel
+cd /home/brian
+```
+
+- **Test that `nigel` can view `brian`'s home directory but cannot create files**:
+
+```bash
+ls
+nano testfile.txt  # This should fail due to write restrictions
+```
+
+- **Test that `nigel` can view but not edit `readme.txt`**:
+
+```bash
+cat readme.txt  # This should succeed
+nano readme.txt  # This should fail due to write restrictions
+```
+
+- **Log in as `vagrant`** and check if `vagrant` can list files in `brian`'s home directory:
+
+```bash
+su vagrant
+cd /home/brian
+ls  # This should fail as `vagrant` has no permissions
+```
+
+- **Test that `vagrant` cannot access `brian`'s home directory at all**:
+
+If you try to `cd` or `ls` in `brian`'s home directory, it should fail because `vagrant` has no read/execute permissions in that directory.
+
+   If `vagrant` uses `sudo`, they can bypass these restrictions and access the directory, since `sudo` gives root privileges.
+
+### 4. **Create a private subdirectory**:
+
+Now, create a private subdirectory inside `brian`'s home directory that only `brian` can access:
+
+```bash
+mkdir ~/private
+chmod 700 ~/private  # Only brian can access it
+```
+
+Create a file `secret.txt` inside this private subdirectory:
+
+```bash
+nano ~/private/secret.txt
+```
+
+Add some content to the file (e.g., "This is a secret.") and save it.
+
+### 5. **Test as `nigel` to verify the private directory**:
+
+Switch to `nigel` and test the access to the `private` subdirectory:
+
+```bash
+su nigel
+cd /home/brian/private  # This should fail due to lack of execute permission
+ls  # This should fail since nigel has no permission to list files
+cat /home/brian/private/secret.txt  # This should fail even though the file has read permissions
+```
+
+### 6. **Compare file permissions**:
+
+Now, log in as `brian` and inspect the permissions of the files:
+
+```bash
+ls -l ~  # Check permissions for readme.txt
+ls -l ~/private  # Check permissions for secret.txt and private folder
+```
+
+You should see the following:
+- `~/readme.txt` will be in `brian`'s group (likely `brian`'s group) or `users`, depending on the group settings.
+- `~/private` and `~/private/secret.txt` will be accessible only to `brian` because the permissions are set to `700`.
+
+The group difference between `~/readme.txt` and `~/private/secret.txt` happens because:
+- `~/readme.txt` is created in `brian`'s home directory, and `brian`'s primary group will be assigned by default.
+- `~/private/secret.txt` inherits the permissions from the parent directory, which is specifically set to restrict access only to `brian`.
+
+### 7. **Conclusion**:
+
+- Even though `secret.txt` has read permissions for everyone, `nigel` cannot read it because they do not have permission to access the entire path (the `private` directory is restricted).
+- The file permissions in the `private` directory ensure that `brian` is the only one who can read, write, or execute files inside it.
+
+### Summary of Commands:
+
+1. Set up home directory permissions for `brian`:
+
+```bash
+chmod 700 ~
+sudo chgrp -R users ~
+chmod 750 ~
+```
+
+2. Create the `readme.txt` file:
+
+```bash
+nano ~/readme.txt
+```
+
+3. Test the permissions as `nigel` and `vagrant`:
+
+```bash
+su nigel
+cd /home/brian
+ls
+nano testfile.txt
+cat readme.txt
+su vagrant
+cd /home/brian
+ls
+```
+
+4. Create a private subdirectory:
+
+```bash
+mkdir ~/private
+chmod 700 ~/private
+nano ~/private/secret.txt
+```
+
+5. Test as `nigel`:
+
+```bash
+su nigel
+cd /home/brian/private
+cat /home/brian/private/secret.txt
+```
+
+6. Check file permissions:
+
+```bash
+ls -l ~
+ls -l ~/private
+```
+
+
 ## Setuid
 
 We are going to create a file to let Nigel (and others in the users group) send Brian messages which go in a file in his home directory.
@@ -305,3 +491,71 @@ and save the sudoers file.
 You can now switch back to `brian` (check the prompt to make sure you are Brian) and do `sudo reboot`. After asking for Brian's password, the virtual machine will now reboot, which you notice because you get kicked out of your ssh connection. Another `vagrant ssh` after a few seconds will get you back in again.
 
 (Note: After rebooting, your `/shared` shared folder might not work. In this case, log out and do `vagrant halt` then `vagrant up` and `vagrant ssh` again on the host machine. When vagrant boots your VM, it automatically sets up the shared folder, but this doesn't always work if you reboot the VM yourself.)
+
+
+The steps outlined involve configuring `sudo` permissions for the user `brian` and allowing members of the `users` group to execute specific commands, like rebooting the machine. Here's a detailed explanation of the steps involved and how to carry them out:
+
+### 1. **Check sudo permissions for `brian`**
+- When logged in as `brian`, if you try to run a command like `sudo ls`, you will see an error:
+  ```
+  brian is not in the sudoers file. This incident will be reported.
+  ```
+  This means `brian` is not currently allowed to use `sudo` and the attempt will be logged.
+
+### 2. **Switch to `vagrant` and view the sudoers file**
+- To modify the sudoers file and allow `brian` to use `sudo`, you need to switch to a user who already has `sudo` permissions. In this case, it's `vagrant`.
+  
+  Run the following command as `vagrant`:
+  ```bash
+  sudo cat /etc/sudoers
+  ```
+  The content will likely look like this:
+  ```
+  root ALL=(ALL) ALL
+  # %wheel ALL=(ALL) NOPASSWD: ALL
+  # %sudo ALL=(ALL) ALL
+  #includedir /etc/sudoers.d
+  ```
+
+### 3. **Edit the sudoers file using `visudo`**
+- Since you don’t want to edit the sudoers file directly to avoid syntax errors, you should use the `visudo` command, which performs syntax checking.
+
+  Run the following command as `vagrant` to edit the sudoers file:
+  ```bash
+  sudo visudo
+  ```
+
+- Inside the file, add the following line to allow all members of the `users` group to execute the `reboot` command:
+  ```bash
+  %users ALL=(ALL) /sbin/reboot
+  ```
+
+- Save and exit the editor (usually pressing `Ctrl+X`, then confirming with `Y` and `Enter`).
+
+### 4. **Test sudo access for `brian`**
+- Switch back to `brian`:
+  ```bash
+  su brian
+  ```
+- Now, try running the following command to reboot the machine:
+  ```bash
+  sudo reboot
+  ```
+- You will be prompted for `brian`'s password. After entering it, the system should reboot.
+
+### 5. **Troubleshooting shared folders**
+- After rebooting, if you notice that the shared folder (`/shared`) isn't working, this is a common issue when using VirtualBox with `vagrant` shared folders.
+  
+  To fix this, perform the following:
+  ```bash
+  vagrant halt  # Shut down the virtual machine
+  vagrant up    # Start the virtual machine again
+  vagrant ssh   # SSH into the VM again
+  ```
+  This should re-establish the shared folder setup automatically.
+
+### Notes:
+- **Never edit `/etc/sudoers` directly**: Always use `visudo` to edit the sudoers file, as it checks for syntax errors before applying the changes. A mistake could lock you out of `sudo` access.
+- **sudo permissions**: By adding `%users ALL=(ALL) /sbin/reboot` to the sudoers file, you grant all members of the `users` group the ability to execute the `reboot` command with `sudo` without additional checks.
+  
+This setup provides a controlled way of giving certain users elevated privileges for specific commands without granting full root access.
