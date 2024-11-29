@@ -102,6 +102,183 @@ Apart from `message-brian`, you'll find a few files by default: `sudo`, `mount`,
 
 Look up the `passwd` program in the manual pages.  Why might that program need to be setuid?
 
+### 1. **Creating the `message-brian.c` File:**
+
+As `brian`, create the `message-brian.c` file in your home directory:
+
+```bash
+nano ~/message-brian.c
+```
+
+Add the following C code to the file:
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+
+const char *filename ="/home/brian/messages.txt";
+
+int main(int argc, char **argv) {
+  if (argc != 2) {
+    puts("Usage: message-brian MESSAGE");
+    return 1;
+  }
+  FILE *file = fopen(filename, "a");
+  if (file == NULL) {
+    puts("Error opening file");
+    return 2;
+  }
+  int r = fputs(argv[1], file);
+  if (r == EOF) {
+    puts("Error writing message");
+    return 2;
+  }
+  r = fputc('\n', file);
+  if (r == EOF) {
+    puts("Error writing newline");
+    return 2;
+  }
+  fclose(file);
+  return 0;
+}
+```
+
+This program allows a user to append a message to `brian`'s `messages.txt` file in his home directory.
+
+### 2. **Compiling the Program:**
+
+Compile the C program using `gcc`:
+
+```bash
+gcc -Wall ~/message-brian.c -o ~/message-brian
+```
+
+After compiling, check the file permissions:
+
+```bash
+ls -l ~/message-brian
+```
+
+You should see the following output (permissions for an executable file):
+
+```
+-rwxr-xr-x 1 brian brian 19984 Oct 28 13:26 message-brian
+```
+
+These are the default permissions for a newly created executable file.
+
+### 3. **Setting the Setuid Bit:**
+
+Now, set the `setuid` bit for the `message-brian` program, which allows it to run with the permissions of the file's owner (`brian`), not the user who runs it (e.g., `nigel`):
+
+```bash
+chmod u+s ~/message-brian
+```
+
+Check the file permissions again:
+
+```bash
+ls -l ~/message-brian
+```
+
+The file permissions should now include the `s` in place of the `x` for the user:
+
+```
+-rwsr-xr-x 1 brian brian 19984 Oct 28 13:26 message-brian
+```
+
+The `s` in the user execute position indicates that the `setuid` bit is set.
+
+### 4. **Running the Program as `nigel`:**
+
+Switch to the `nigel` user using `su`:
+
+```bash
+su nigel
+```
+
+Now, run the `message-brian` program in `brian`'s home directory to append a message:
+
+```bash
+cd /home/brian
+./message-brian "Hi from Nigel!"
+```
+
+The program should execute successfully, even though `nigel` doesn't have permission to write to `brian`'s home directory. It appends the message to `messages.txt`.
+
+### 5. **Checking the `messages.txt` File:**
+
+Check the contents of the `messages.txt` file:
+
+```bash
+cat /home/brian/messages.txt
+```
+
+The file should contain the message from `nigel`:
+
+```
+Hi from Nigel!
+```
+
+You can run the program again to append another message:
+
+```bash
+./message-brian "Hi again!"
+```
+
+After running this command, check the `messages.txt` file again:
+
+```bash
+cat /home/brian/messages.txt
+```
+
+You should see:
+
+```
+Hi from Nigel!
+Hi again!
+```
+
+### 6. **Understanding the Setuid Mechanism:**
+
+The `setuid` bit allows the `message-brian` program to run with the privileges of the file owner (`brian`), regardless of the user running the program. This is why `nigel` (who normally doesn't have permission to write to `brian`'s home directory) can still append to `messages.txt` using `message-brian`.
+
+### 7. **Security Risks of Setuid Programs:**
+
+**Warning:** Writing your own `setuid` programs is risky because bugs in such programs can introduce security vulnerabilities, potentially allowing users to escalate their privileges. Specifically, if a `setuid` program is vulnerable to exploits like buffer overflows, users might be able to overwrite memory and execute arbitrary code with elevated privileges.
+
+In the case of the `message-brian` program, any bugs could allow an attacker to exploit it to run arbitrary commands as `brian`. This is why it's crucial to write `setuid` programs with great care and knowledge of secure coding practices.
+
+### 8. **Finding Files with the Setuid Bit Set:**
+
+To find all files with the `setuid` bit set on the system, run the following command as `vagrant` (using `sudo`):
+
+```bash
+sudo find / -perm /4000
+```
+
+This will list all files with the `setuid` bit set. You may see files like `sudo`, `mount`, `umount`, and `su`.
+
+### 9. **Understanding Setuid Files:**
+
+- **`sudo`**: This allows users to run commands with the privileges of another user (typically root). It must be `setuid` because users need to execute it with elevated privileges to run commands as root.
+  
+- **`mount` and `umount`**: These programs allow mounting and unmounting of file systems. They need to be `setuid` because users often need to mount/unmount file systems that require root privileges (e.g., mounting external drives).
+  
+- **`su`**: This program allows users to switch user identities. It's typically `setuid` so that users can switch to the root account (or another account) using `su`, which requires root privileges.
+
+### 10. **The `passwd` Program and Setuid:**
+
+The `passwd` program is used to change a user's password. It needs to be `setuid` because only the root user can update the password file (`/etc/passwd`) and set the password for a user. If it wasn't `setuid`, users wouldn't be able to change their own passwords, as the file is usually owned by root and requires root privileges to modify.
+
+### Summary:
+
+- The `setuid` bit allows a program to run with the privileges of the file's owner, not the user executing the program.
+- You can use `setuid` programs to allow users to perform specific tasks that require elevated privileges, without giving them full access to root.
+- `setuid` programs should be written with caution to avoid security vulnerabilities that could be exploited to escalate privileges.
+- Common `setuid` programs include `sudo`, `mount`, `umount`, `su`, and `passwd`.
+
+
 ## Sudo
 
 Make sure your terminal is running as `brian` and try a `sudo ls`. You will see a general message, you will be asked for your password, and then you will get the error `brian is not in the sudoers file.  This incident will be reported.` (This means that an entry has been logged in `/var/log/messages`.)
