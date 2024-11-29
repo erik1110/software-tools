@@ -30,7 +30,49 @@ Firstly you'll need to create the knowledge base in Horn-clauses.  Start by defi
 =parent(pugsley,gomez)= states that Pugsley's parent is Gomez.
 
 ```
+parent(debbie, dave).
+parent(debbie, sharron).
 
+parent(fester, eudora).
+parent(gomez, eudora).
+
+parent(gomez, father).
+parent(fester, father).
+
+parent(morticia, hester).
+parent(ophelia, hester).
+parent(morticia, father_frump).
+parent(ophelia, father_frump).
+
+parent(wednesday, morticia).
+parent(wednesday, gomez).
+
+parent(pugsley, morticia).
+parent(pugsley, gomez).
+
+parent(pubert, morticia).
+parent(pubert, gomez).
+
+parent(eudora, mooma).
+parent(eudora, slurp).
+
+parent(father_frump, mooma).
+parent(father_frump, slurp).
+
+parent(hester, mooma).
+parent(hester, slurp).
+
+parent(jester, mooma).
+parent(jester, slurp).
+
+parent(hester, mooma).
+parent(hester, slurp).
+
+parent(sloom, mooma).
+parent(sloom, slurp).
+
+child(X,Y) :- parent(X,Y).
+grandparent(X,Z) :- parent(X,Y), parent(Y,Z).
 ```
 
 *Task 1.* Capture the Addams Family tree using Horn clauses. To test run the query =parent(X,sharron)= to see if /Sharron/ is anyone's parent.  The only match should be /Debbie/.
