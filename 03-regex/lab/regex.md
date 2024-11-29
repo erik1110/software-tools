@@ -89,23 +89,48 @@ it and put an 's' on the end. Using this, can you figure out the sed expression
 to alter these lines so that any line ending in 'day' becomes a string "Xday or
 Xweek", where `X` is the other part of the word?
     ```
-    
+    grep 'day' words | sed 's/\(.*\)day$/\1 or \1week/
     ```
  * Finally, try using two subexpressions at once to solve this: I want to see
    any word ending in _either_ 'way' or 'day' to be flipped around and
 parenthesised, so that 'someday' becomes 'day (some)' and 'speedway' becomes
 'way (speed)'.
     ```
-    
+    grep -E 'way$|day$' words | sed -E 's/(.*)(way|day)$/\2 (\1)/'
     ```
  * We've been doing a lot of work on single-word lines, which are great for
    examples, but not necessarily realistic for how you'll deploy `sed` in
 reality. Study the difference between applying `s/a/e/` and `s/a/e/g` to your
 list of words. What is the `g` instruction doing, and why might that be
 important?
+
+   Let me explain the difference between `s/a/e/` and `s/a/e/g`:
+
+    Without the `g` flag (global flag):
+    ```bash
+    # s/a/e/ (first occurrence only)
+    echo "banana" | sed 's/a/e/'   # result: "benana"
+    echo "alabama" | sed 's/a/e/'  # result: "eLabama"
     ```
     
+    With the `g` flag:
+    ```bash
+    # s/a/e/g (all occurrences)
+    echo "banana" | sed 's/a/e/g'   # result: "benene"
+    echo "alabama" | sed 's/a/e/g'  # result: "elebeме"
     ```
+    
+    The `g` flag is crucial because:
+    1. Without `g`, `sed` only replaces the first occurrence of the pattern in each line
+    2. With `g`, `sed` replaces ALL occurrences of the pattern in the line
+    
+    This becomes especially important when:
+    - Working with text that has multiple instances of a pattern
+    - Ensuring comprehensive substitution across an entire line
+    - Cleaning or transforming data where you want complete replacement
+    - Avoiding partial or incomplete transformations
+
+In real-world text processing, you'll often want to replace all instances of a pattern, making the `g` flag a powerful and frequently used option in `sed`.
 
 ## More grep
 
