@@ -70,6 +70,120 @@ Argument #1: [Hello world!]
 
 The command `rm` (remove) deletes files again. Use it to remove your file with spaces in its name, using one of several methods to get the shell to pass the spaces through to `rm`.
 
+
+### **Step 1: Creating a file with a space in its name**
+```bash
+touch "silly named file"
+```
+- **What happens:** The quotes tell the shell to treat `silly named file` as a single string (a single filename). This creates a file named `silly named file`.
+
+#### **Without quotes:**
+```bash
+touch silly named file
+```
+- **What happens:** Without quotes, the shell interprets `silly`, `named`, and `file` as three separate arguments. This would attempt to create three files: `silly`, `named`, and `file`.
+
+**Check with:**
+```bash
+ls
+```
+- You’ll see either one file (`silly named file`) or three files (`silly`, `named`, and `file`) depending on whether quotes were used.
+
+---
+
+### **Step 2: Using `ls` with autocomplete**
+1. Start typing:
+   ```bash
+   ls sill
+   ```
+2. Press the `TAB` key to autocomplete.
+   - If no other files start with `sill`, the shell will complete the filename. For a file with spaces (e.g., `silly named file`), Bash will escape the spaces with backslashes:
+     ```bash
+     ls silly\ named\ file
+     ```
+
+**Explanation:**
+- The shell escapes spaces with `\` to treat the filename as a single entity.
+- Alternatively, you could also enclose the name in quotes:
+  ```bash
+  ls "silly named file"
+  ```
+
+---
+
+### **Step 3: Running `arguments` to produce specific output**
+You want the program `arguments` to print:
+```plaintext
+Argument #0: [./arguments]
+Argument #1: [Hello world!]
+```
+
+#### **Method 1: Use quotes**
+```bash
+./arguments "Hello world!"
+```
+- The quotes treat `Hello world!` as a single argument, preserving the space.
+
+**Output:**
+```plaintext
+Argument #0: [./arguments]
+Argument #1: [Hello world!]
+```
+
+#### **Method 2: Escape the space**
+```bash
+./arguments Hello\ world!
+```
+- The backslash escapes the space, so the shell treats `Hello world!` as a single argument.
+
+**Output:**
+```plaintext
+Argument #0: [./arguments]
+Argument #1: [Hello world!]
+```
+
+#### **Method 3: Use a variable**
+```bash
+arg="Hello world!"
+./arguments "$arg"
+```
+- By storing the string in a variable and quoting it, you ensure the shell passes it as a single argument.
+
+**Output:**
+```plaintext
+Argument #0: [./arguments]
+Argument #1: [Hello world!]
+```
+
+---
+
+### **Step 4: Deleting a file with spaces in its name**
+The command `rm` removes files. If the file has spaces in its name, you must handle the spaces correctly.
+
+#### **Method 1: Use quotes**
+```bash
+rm "silly named file"
+```
+
+#### **Method 2: Use escape characters**
+```bash
+rm silly\ named\ file
+```
+
+#### **Method 3: Use autocomplete**
+- Start typing `rm sill` and press `TAB`. The shell will autocomplete the file name (escaping the spaces), and you can press `ENTER` to delete it.
+
+---
+
+### **Summary**
+1. Use quotes or escape spaces to handle filenames with spaces.
+2. The shell autocompletes filenames with spaces by escaping the spaces with backslashes.
+3. You can use any method (quotes, escaping, or variables) to pass strings with spaces as arguments or delete files with spaces in their names.
+
+
+
+
+
 ## Shell variables
 
 In the shell, `VARIABLE=VALUE` sets a variable to a value and `$VARIABLE` retrieves its value. For example, to save typing a filename twice:
