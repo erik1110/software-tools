@@ -17,51 +17,47 @@ To get started download and run the AbcDatalog JAR file:
 [[file:addams.png]]
  
 #+BEGIN_SRC 
-parent(debbie, dave).
-parent(debbie, sharron).
+parent(dave, debbie).
+parent(sharron, debbie).
 
-parent(fester, eudora).
-parent(gomez, eudora).
+parent(eudora, fester).
+parent(father, fester).
 
-parent(gomez, father).
-parent(fester, father).
+parent(eudora, gomez).
+parent(father, gomez).
 
-parent(morticia, hester).
-parent(ophelia, hester).
-parent(morticia, father_frump).
-parent(ophelia, father_frump).
+parent(hester, morticia).
+parent(father_frump, morticia).
 
-parent(wednesday, morticia).
-parent(wednesday, gomez).
+parent(hester, ophella).
+parent(father_frump, ophella).
 
-parent(pugsley, morticia).
-parent(pugsley, gomez).
+parent(morticia, wednesday).
+parent(gomez, wednesday).
 
-parent(pubert, morticia).
-parent(pubert, gomez).
+parent(morticia, pugsley).
+parent(gomez, pugsley).
 
-parent(eudora, mooma).
-parent(eudora, slurp).
+parent(morticia, pubert).
+parent(gomez, pubert).
 
-parent(father_frump, mooma).
-parent(father_frump, slurp).
+parent(mooma, eudora).
+parent(slurp, eudora).
 
-parent(hester, mooma).
-parent(hester, slurp).
+parent(mooma, father_frump).
+parent(slurp, father_frump).
 
-parent(jester, mooma).
-parent(jester, slurp).
+parent(mooma, jester).
+parent(slurp, jester).
 
-parent(hester, mooma).
-parent(hester, slurp).
-
-parent(sloom, mooma).
-parent(sloom, slurp).
+parent(mooma, sloom).
+parent(slurp, sloom).
 
 child(X,Y) :- parent(Y,X).
 grandparent(X,Z) :- parent(X,Y), parent(Y,Z).
 
 sibling(X, Y) :- parent(P, X), parent(P, Y), X != Y.
+cousin(X, Y) :- grandparent(P, X), grandparent(P, Y).
 #+END_SRC
 
 [[https://en.wikipedia.org/wiki/The_Addams_Family][The Addams Family]] tree (or a cut down version of it) is shown above.  Your task is to encode the family tree in Datalog.  To do this you'll need to describe the relationships in Horn clauses.
