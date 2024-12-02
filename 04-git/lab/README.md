@@ -480,3 +480,103 @@ a script to search for your missing commit.
 Task 4  
 What does the `git gc` command do and why is it going to make this all
 *a lot* harder. When does it get run?
+
+
+### **任務 1：找到消失的 Commit ID**
+
+1. **使用 `git reflog` 查看記錄：**  
+   `git reflog` 是 Git 的操作日誌，會記錄所有操作（包括那些被刪除的提交）。執行以下指令：
+   ```bash
+   git reflog
+   ```
+   在輸出的日誌中尋找包含提交訊息 `"Here be treasure!"` 的行。
+
+2. **用 `grep` 快速搜尋：**  
+   如果提交訊息是獨特且容易辨識的，可以用 `grep` 篩選：
+   ```bash
+   git reflog | grep "Here be treasure!"
+   ```
+   這樣會直接顯示包含該訊息的行，以及對應的 **Commit ID**。
+
+---
+
+### **任務 2：恢復消失的 Commit**
+
+1. **檢出該 Commit（選擇性操作）：**  
+   找到消失的 **Commit ID**（例如 `abc123`）後，可以用以下指令檢出到該版本：
+   ```bash
+   git checkout abc123
+   ```
+   為了保存這個 Commit，可以基於它建立一個新的分支：
+   ```bash
+   git branch recovered-treasure
+   ```
+
+2. **使用 `git cherry-pick` 恢復 Commit：**  
+   如果希望直接將該 Commit 合併回當前分支，執行：
+   ```bash
+   git cherry-pick abc123
+   ```
+   這會將 `abc123` 的變更應用到當前分支。
+
+3. **比較差異與建立補丁檔案：**  
+   若要檢查該 Commit 和其他 Commit 的差異，可以使用：
+   ```bash
+   git diff COMMIT1 COMMIT2
+   ```
+   如果需要將變更存為補丁檔案：
+   ```bash
+   git diff abc123 > treasure.patch
+   ```
+   然後使用補丁檔案恢復變更：
+   ```bash
+   git apply treasure.patch
+   ```
+
+---
+
+### **任務 3：假設忘記 Commit Message，從 `.git/objects` 搜尋**
+
+1. **了解 Git 對象的結構：**  
+   Git 存儲的所有提交、樹和 blob 都在 `.git/objects` 目錄中，使用以下指令可以查看：
+   ```bash
+   ls .git/objects
+   ```
+   這些目錄內部包含哈希值為名稱的文件，代表 Git 的對象（例如 Commit、Tree、Blob 等）。
+
+2. **用 `git cat-file` 查看對象內容：**  
+   假設你知道某個對象 ID，例如 `abc123`，可以使用以下指令查看它的內容：
+   ```bash
+   git cat-file -p abc123
+   ```
+   如果是提交對象，你會看到類似以下的輸出：
+   ```
+   tree <tree-hash>
+   parent <parent-hash>
+   author <author-info>
+   committer <committer-info>
+   Commit message
+   ```
+
+3. **撰寫腳本搜索：**  
+   從已知的 Commit 或目錄開始，使用 `git cat-file` 遍歷 `.git/objects` 中的對象，直到找到你要的 Commit。
+
+---
+
+### **任務 4：`git gc` 的功能與影響**
+
+1. **`git gc` 是什麼？**  
+   `git gc`（garbage collection，垃圾回收）用於清理 Git 儲存庫，刪除不再需要的對象，壓縮存儲的資料。執行以下指令即可啟動：
+   ```bash
+   git gc
+   ```
+
+2. **它如何影響找回 Commit？**  
+   - 被刪除的提交會變成 **孤立對象**（dangling objects）。這些對象暫時還在 `.git/objects` 目錄中。
+   - **一旦執行 `git gc`**，這些孤立對象將被永久刪除，無法再找回。
+
+3. **`git gc` 什麼時候執行？**  
+   - 手動執行時。
+   - Git 自動觸發（當有很多孤立對象或操作達到一定次數時）。
+
+**解決建議**：如果還沒執行 `git gc`，你的 Commit 可能還在 `.git/objects` 中，可以用上述方法找回。但一旦執行 `git gc`，這些對象就會被刪除。
