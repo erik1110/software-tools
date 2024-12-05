@@ -52,7 +52,7 @@ SELECT name FROM PARTY ORDER BY name;
  SELECT sum(votes) FROM Candidate c 
  INNER JOIN ward w ON c.ward = w.id
  INNER JOIN party p ON c.party = p.id
- WHERE p.name='Labour' and w.name='Stockwood'
+ WHERE p.name='Labour' and w.name='Stockwood';
 ```
 
 4. List the names, parties and number of votes obtained for all candidates in the Southville ward. Order the candidates by number of votes obtained descending (winner comes first).
@@ -114,7 +114,7 @@ count(s.gender)
 3. For the Stoke Bishop ward, list the 9 occupation class names and the number of men in each occupation. Your table should have two columns called name and number. 
 
 ```
-  SELECT o.name, s.data
+  SELECT o.id, o.name, s.data
   FROM Statistic s
   LEFT JOIN Ward w ON w.code = s.wardId
   LEFT JOIN Occupation o ON s.occId = o.id
@@ -166,3 +166,9 @@ Elementary occupations|103
   - The table is sorted by count ascending.
 11. Create a table with three columns occupation, women and men and one row per occupation class. The occupation column should list the occupation class names. The women and men columns in each row should list the total number of women resp. men in the row's occupation class in the whole dataset. The intention here is not to have to copy-paste a subquery 9 times.
 12. The same as question 9, but now with a 10th row in the table listing the value for all of England. You can use the string 'England' for the region column.
+  SELECT o.id, o.name, s.data
+  FROM Statistic s
+  LEFT JOIN Ward w ON w.code = s.wardId
+  LEFT JOIN Occupation o ON s.occId = o.id
+  WHERE s.gender = 1 and w.name = 'Stoke Bishop'
+  GROUP BY o.id;
