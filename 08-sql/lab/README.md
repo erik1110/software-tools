@@ -30,7 +30,7 @@ You can draw the diagram with pen and paper or you can use a free modelling tool
   * To add a relationship, select a table by clicking its header and drag one of the blue triangles that appear round the edges onto another table. You can change the type of a relationship in the details panel on the right (the "line start" and "line end" boxes).
   * File/Save as lets you download your diagram in an XML-based format, which you can open and edit later. File/Export as lets you download it as an image.
 
-
+![ER diagram](./ER_Diagram.png)
 
 # Implementing a Schema
 
