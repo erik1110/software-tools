@@ -1,0 +1,8 @@
+softwaretools/server02/Server02Application.class
+softwaretools/server02/model/internal/DatabaseImpl.class
+softwaretools/server02/model/Database.class
+softwaretools/server02/model/Unit.class
+softwaretools/server02/model/Student.class
+softwaretools/server02/Controller.class
+softwaretools/server02/model/Pair.class
+softwaretools/server02/Templates.class
