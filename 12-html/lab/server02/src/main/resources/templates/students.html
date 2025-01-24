@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>List of Students</title>
+    </head>
+    <body>
+        <h1>List of Students</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th scope="col">Student id</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Link</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="student : ${students}">
+                    <td th:text="${student.id}"></td>
+                    <td th:text="${student.name}"></td>
+                    <td><a th:href="'/student/' + ${student.id}" th:text="'details'"></a></td>
+                </tr>
+            </tbody>
+        </table>
+    </body>
+</html>

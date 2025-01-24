@@ -21,7 +21,7 @@
             <tr th:each="unit : ${units}">
                 <td th:text="${unit.code}"></td>
                 <td th:text="${unit.title}"></td>
-                <td><a th:href="'/unit/details/' + ${unit.code}" th:text="'details'"></a></td>
+                <td><a th:href="'/unit/' + ${unit.code}" th:text="'details'"></a></td>
             </tr>
         </tbody>
         </table>
