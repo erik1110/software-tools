@@ -5,6 +5,7 @@ body {
     color: #222;
     background-color: #f8f9fa;
     padding: 40px;
+    background-image: url("baseline.png");
 }
 
 h1 {
