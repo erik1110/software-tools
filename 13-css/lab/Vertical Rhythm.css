@@ -1,0 +1,38 @@
+html {
+    font-size: 16px;
+}
+
+body {
+    background-image: url("baseline.png");
+    background-repeat: repeat;
+    font-size: 1rem;
+    line-height: 1.25rem;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 1.25rem;
+}
+
+h1 {
+    background-color: rgba(0, 0, 255, 0.25);
+    font-size: 2.5rem;
+    font-weight: 800;
+    line-height: 3.75rem;
+    text-align: center;
+    padding-left: 0.5em;
+    margin: 1.25rem 0 1.25rem;
+}
+
+h2 {
+    background-color: rgba(0, 0, 255, 0.25);
+    font-size: 1.25rem;
+    font-weight: 600;
+    line-height: 2.5rem;
+    text-align: center;
+    padding-left: 0.5em;
+    margin-bottom: 1.25rem;
+
+}
+
+p {
+    padding: 0.25rem 0 0.25rem; /* Small top padding to adjust positioning */
+}
