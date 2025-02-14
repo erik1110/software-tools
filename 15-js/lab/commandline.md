@@ -65,9 +65,11 @@ Note that `.sort` did not just return the list in sorted form, but altered the
 list order.  Procedures in JS often have side-effects. If you wanted to just
 create a sorted copy without sorting the original, you could use `.toSorted`. To
 see all the available procedures in node, type the identifier with a dot
-(`list.`) and then tab twice. A useful trick if you want to remove a specific
+(`list.`) and then tab twice. One you commonly might use is `.includes`, which tells
+you if an array contains a value. A useful trick if you want to remove a specific
 value from an array is to find the index of the item with `.indexOf` and then
-call (`.splice(index, 1)`). 
+call (`.splice(index, 1)`). Note the difference between what this method returns 
+and the effect it has on the original array.
 
 Now let's look at objects.
 
@@ -84,8 +86,9 @@ obn = {
 }
 ```
 
-Take a look at the structure of `obn` in your console. This is an object with
-another object (`obj`) as one of its properties.
+Note that you'll have to paste the full definition of `obn` at once, rather than
+entering it line-by-line. Take a look at the structure of `obn` in your console. 
+This is an object with another object (`obj`) as one of its properties.
 
 Alter `obj` by changing John's age to 33, and then look at `obn` again. You
 should see your representation has changed -- when you created `obn` you passed
