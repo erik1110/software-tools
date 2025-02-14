@@ -21,7 +21,7 @@ function myfunction() {
         }
         let id = `tile_${i+1}`
         let tile = document.createElement('div');
-        tile.addEventListener("click", function() {touchTile(i+1)});
+        tile.addEventListener("click", function() {touchTile(i)});
         tile.id = id;
         board.appendChild(tile);
     }
@@ -29,9 +29,9 @@ function myfunction() {
 }
 
 function touchTile(i) {
-    if (!playable) {return};
+    // if (!playable) {return};
     if (untouched_tiles[i] == 1) {return};
-    let id = `tile_${i}`;
+    let id = `tile_${i+1}`;
     let tile = document.getElementById(id);
     let neighbor_mines = mineNeighbours(i);
     if (mines[i] == 1) {
@@ -40,12 +40,11 @@ function touchTile(i) {
         playable = false;
     } else {
         tile.className = 'clear';
-        untouched_tiles[i] = true;
+        untouched_tiles[i] = 1;
         if (neighbor_mines != 0) {
             tile.textContent = neighbor_mines;
         } else {
             const neighbours = findNeighbours(i);
-            console.log("neighbours:", neighbours);
             for (const neighbour of neighbours) {
                 touchTile(neighbour);
             }
@@ -64,10 +63,9 @@ function checkIfWin() {
 }
 
 function findNeighbours(i) {
-    console.log("findNeighbours:", i);
     const neighbors = [];
-    const row = Math.floor((i-1) / 20);
-    const col = (i-1) % 20;
+    const row = Math.floor(i / 20);
+    const col = i % 20;
 
 
     const directions = [
@@ -80,7 +78,7 @@ function findNeighbours(i) {
         const newCol = col + dc;
 
         if (newRow >= 0 && newRow < 20 && newCol >= 0 && newCol < 20) {
-            neighbors.push(newRow * 20 + newCol + 1);
+            neighbors.push(newRow * 20 + newCol );
         }
     }
 
@@ -89,10 +87,10 @@ function findNeighbours(i) {
 
 function mineNeighbours(i) {
     const neighbours = findNeighbours(i);
+    console.log("neighbours:", neighbours);
     let bombs = 0;
     for (const neighbour of neighbours) {
         bombs += mines[neighbour];
     }
-
     return bombs;
 }

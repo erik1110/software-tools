@@ -38,4 +38,5 @@ div.board > div.clear {
 div.board > div.bomb {
     background-color: #BFC9CA;
     color: red;
+    font-size: 10;
 }
