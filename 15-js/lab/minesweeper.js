@@ -3,9 +3,26 @@ element.addEventListener("click", myfunction);
 let mines = Array(400);
 let playable = true;
 let untouched_tiles = Array(400);
+let timer;
+let timeElapsed;
+
+function startTimer() {
+    timeElapsed = 0;
+    const timerDisplay = document.getElementById("timer");
+    timerDisplay.textContent = "Time: 0s";
+
+    timer = setInterval(() => {
+        timeElapsed++;
+        timerDisplay.textContent = `Time: ${timeElapsed}s`;
+    }, 1000);
+}
+
+function stopTimer() {
+    clearInterval(timer);
+}
 
 function myfunction() {
-    let board = document.querySelector("div");
+    let board = document.querySelector(".board");
     playable = true;
     // clear all elements
     while (board.firstChild) {
@@ -25,12 +42,12 @@ function myfunction() {
         tile.id = id;
         board.appendChild(tile);
     }
-    console.log("mines:", mines);
+    // start Timer
+    startTimer();
 }
 
 function touchTile(i) {
-    // if (!playable) {return};
-    if (untouched_tiles[i] == 1) {return};
+    if (!playable || untouched_tiles[i] == 1) {return};
     let id = `tile_${i+1}`;
     let tile = document.getElementById(id);
     let neighbor_mines = mineNeighbours(i);
@@ -38,11 +55,23 @@ function touchTile(i) {
         tile.className = 'bomb';
         tile.textContent = '*';
         playable = false;
+        revealAllBombs();
+        stopTimer();
     } else {
         tile.className = 'clear';
         untouched_tiles[i] = 1;
         if (neighbor_mines != 0) {
             tile.textContent = neighbor_mines;
+            switch (neighbor_mines) {
+                case 1: tile.style.color = 'blue'; break;
+                case 2: tile.style.color = 'green'; break;
+                case 3: tile.style.color = 'red'; break;
+                case 4: tile.style.color = 'purple'; break;
+                case 5: tile.style.color = 'maroon'; break;
+                case 6: tile.style.color = 'turquoise'; break;
+                case 7: tile.style.color = 'black'; break;
+                case 8: tile.style.color = 'gray'; break;
+            }
         } else {
             const neighbours = findNeighbours(i);
             for (const neighbour of neighbours) {
@@ -57,7 +86,9 @@ function checkIfWin() {
     let not_mines_sum = 400 - mines.reduce((acc, curr) => acc + curr, 0);
     let untouched_sum = untouched_tiles.reduce((acc, curr) => acc + curr, 0);
     if (not_mines_sum == untouched_sum) {
+        stopTimer();
         alert("You win!");
+        addToScoreboard(timeElapsed);
         playable = false;
     }
 }
@@ -93,4 +124,33 @@ function mineNeighbours(i) {
         bombs += mines[neighbour];
     }
     return bombs;
+}
+
+function revealAllBombs() {
+    for (let i=0; i < 400; i++) {
+        let id = `tile_${i+1}`;
+        let tile = document.getElementById(id);
+        if (mines[i] == 1) {
+            tile.className = 'bomb';
+            tile.textContent = '*';
+        }
+    }
+}
+
+let scoreboard = [];
+
+function addToScoreboard(time) {
+    scoreboard.push(time);
+    scoreboard.sort((a, b) => a - b);
+    updateScoreboard();
+}
+
+function updateScoreboard() {
+    const scoreboardDisplay = document.getElementById("scoreboard");
+    scoreboardDisplay.innerHTML = "<h3>Scoreboard</h3>";
+    scoreboard.forEach((time, index) => {
+        const entry = document.createElement("div");
+        entry.textContent = `Game ${index + 1}: ${time}s`;
+        scoreboardDisplay.appendChild(entry);
+    });
 }
