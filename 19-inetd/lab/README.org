@@ -21,6 +21,11 @@ You'll need to look up how you make network requests in your favorite language.
 You'll need a server to test against though.  Start with =netcat= listening on a port and check the messages are getting through as you'd expect then try fingering someone else's server.
 
 - You can get weather forcasts by fingering =bristol@graph.no= (and try fingering =@graph.no= for more options).
+  ```
+  finger bristol@graph.no
+  echo "bristol" | nc graph.no 79finger bristol@graph.no
+  ```
+
 - [[https://plan.cat]] is a public finger server... have a look at what people post
 
   *Hint:* the simplest possible implementation would be this shellscript:
